@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happy Birthday Phoebe!</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0a0f1d;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        /* Centering layout */
+        .center-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .content-box {
+            text-align: center;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        /* Large static birthday cake */
+        .cake-display {
+            font-size: 110px;
+            line-height: 1;
+            margin-bottom: -10px;
+            user-select: none;
+            filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.4));
+        }
+        h1 {
+            color: #4facfe;
+            font-size: 55px;
+            text-shadow: 0 0 20px #00f2fe;
+            margin: 0;
+        }
+        p {
+            font-size: 26px;
+            color: #e0e0e0;
+            line-height: 1.6;
+            max-width: 650px;
+            margin: 0;
+        }
+        /* Style shared by the sparkle text and the signature */
+        .sparkle, .signature {
+            color: #00f2fe;
+            text-shadow: 0 0 10px #00f2fe;
+            font-weight: bold;
+        }
+        /* Bottom-right signature placement */
+        .signature {
+            position: absolute;
+            bottom: 45px;
+            right: 50px;
+            z-index: 3;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Centered Layout Box -->
+    <div class="center-wrapper">
+        <div class="content-box">
+            <div class="cake-display">🎂</div>
+            <h1>Happy Birthday, Phoebe!</h1>
+            <p>I love you from <span class="sparkle">nanoparticles</span> and beyond. 🌌✨</p>
+        </div>
+    </div>
+
+    <!-- Cohesive Nanoparticle-Style Signature -->
+    <div class="signature">Love, Janna</div>
+
+    <script>
+        // Nanoparticle background physics
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        const particleCount = 60;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1,
+                vx: (Math.random() - 0.5) * 1.5,
+                vy: (Math.random() - 0.5) * 1.5,
+                alpha: Math.random() * 0.5 + 0.3
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 242, 254, ${p.alpha})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#00f2fe';
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
